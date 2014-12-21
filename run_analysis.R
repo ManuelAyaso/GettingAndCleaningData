@@ -1,5 +1,3 @@
-library(pylr)
-
 createTidyData <- function () {
     X <- mergeData() # Step 1
     X <- extractMeanAndStdCols(X) # Step 2
@@ -17,7 +15,7 @@ extractMeanAndStdCols <- function (X) {
             cols <- c(cols, name)
         }
     }
-    cols <- c(cols, "subjectId", "labelId", "label")
+    cols <- c(cols, "subjectId", "label")
     X[, cols]
 }
 
@@ -29,16 +27,16 @@ mergeData <- function () {
     X_train <- getCompleteData("train")
     X_test <- getCompleteData("test")
    
-    X <- rbind(X_train_extracted, X_test_extracted)
+    X <- rbind(X_train, X_test)
     X
 }
 
 getCompleteData <- function (type) {
-    colNames <- read.table("./features.txt", sep = "")[, 2]
-    subjectIds <- read.table(paste("./", type, "/subject_", type, ".txt", sep = ""), sep = "")
-    labelIds <- read.table(paste("./", type, "/y_", type, ".txt", sep = ""), sep = "") 
+    colNames <- read.table("./UCI HAR Dataset/features.txt", sep = "")[, 2]
+    subjectIds <- read.table(paste("./UCI HAR Dataset/", type, "/subject_", type, ".txt", sep = ""), sep = "")
+    labelIds <- read.table(paste("./UCI HAR Dataset/", type, "/y_", type, ".txt", sep = ""), sep = "") 
     
-    X <- read.table(paste("./", type, "/X_", type, ".txt", sep = ""), sep = "", col.names = colNames)
+    X <- read.table(paste("./UCI HAR Dataset/", type, "/X_", type, ".txt", sep = ""), sep = "", col.names = colNames)
     lastColIndex <- length(colnames(X))
     X <- cbind(X, subjectIds)
     colnames(X)[lastColIndex + 1] <- "subjectId"
@@ -46,7 +44,7 @@ getCompleteData <- function (type) {
     X <- cbind(X, labelIds)
     colnames(X)[lastColIndex + 1] <- "labelId"
     
-    activities <- as.data.frame(read.table("./activity_labels.txt", col.names = c("labelId", "label")))
+    activities <- as.data.frame(read.table("./UCI HAR Dataset/activity_labels.txt", col.names = c("labelId", "label")))
     X <- join(X, activities, type = "inner")
     
     # Now we can remove labelId
@@ -56,4 +54,4 @@ getCompleteData <- function (type) {
 }
 
 tidyData <- createTidyData()
-write.table(tidyData[, 1:3], "tidy_data.txt", row.name=FALSE)
+write.table(tidyData, "tidy_data.txt", row.names = FALSE)
