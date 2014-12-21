@@ -3,6 +3,8 @@ GettingAndCleaningData
 
 This is the Course Project for the course Getting and Cleaning Data.
 
+The **CodeBook.md** describes the variables, data and transformations that have been done in order to complete the project.
+
 There is only one script included **run_analysis.R** with the following functions:
 
 * createTidyData: Generates the tidy data set with the average of each variable for each activity and each subject.
@@ -15,5 +17,7 @@ In order to correct execute the script you need to set the working directory to 
 
 Once the working directory is correct, to execute the script just call:
 > source("run_analysis.R")
+
+It will generate a data.frame called **tidyData** and it will write that data to a file called **tidy_data.txt**.
 
 Note: It's using some functions from the pylr library. I am not using library(pylr) since it is producing an error in my environment, but without that call it works correctly. In case something unexpected happens regarding those functions make sure you have loaded the pylr package.
